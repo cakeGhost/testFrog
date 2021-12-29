@@ -16,6 +16,8 @@
 		446C830627621E7600EBBC0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 446C830527621E7600EBBC0B /* Assets.xcassets */; };
 		446C830927621E7600EBBC0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 446C830727621E7600EBBC0B /* LaunchScreen.storyboard */; };
 		446C8310276236EA00EBBC0B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 446C830F276236EA00EBBC0B /* Constants.swift */; };
+		4472CF75276C3E98007B78F1 /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4472CF74276C3E98007B78F1 /* MenuScene.swift */; };
+		44825E06277964CD0095EF68 /* bgm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 44825E05277964CD0095EF68 /* bgm.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		446C830527621E7600EBBC0B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		446C830827621E7600EBBC0B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		446C830F276236EA00EBBC0B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		4472CF74276C3E98007B78F1 /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		44825E05277964CD0095EF68 /* bgm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgm.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +65,7 @@
 		446C82F727621E7300EBBC0B /* testFrog */ = {
 			isa = PBXGroup;
 			children = (
+				44825E04277964580095EF68 /* Sound */,
 				446C82F827621E7300EBBC0B /* AppDelegate.swift */,
 				446C82FA27621E7300EBBC0B /* GameScene.sks */,
 				446C82FC27621E7300EBBC0B /* Actions.sks */,
@@ -70,8 +75,17 @@
 				446C830527621E7600EBBC0B /* Assets.xcassets */,
 				446C830727621E7600EBBC0B /* LaunchScreen.storyboard */,
 				446C830F276236EA00EBBC0B /* Constants.swift */,
+				4472CF74276C3E98007B78F1 /* MenuScene.swift */,
 			);
 			path = testFrog;
+			sourceTree = "<group>";
+		};
+		44825E04277964580095EF68 /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				44825E05277964CD0095EF68 /* bgm.mp3 */,
+			);
+			path = Sound;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -133,6 +147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				446C830427621E7400EBBC0B /* Main.storyboard in Resources */,
+				44825E06277964CD0095EF68 /* bgm.mp3 in Resources */,
 				446C82FB27621E7300EBBC0B /* GameScene.sks in Resources */,
 				446C830627621E7600EBBC0B /* Assets.xcassets in Resources */,
 				446C830927621E7600EBBC0B /* LaunchScreen.storyboard in Resources */,
@@ -149,6 +164,7 @@
 			files = (
 				446C8310276236EA00EBBC0B /* Constants.swift in Sources */,
 				446C82FF27621E7300EBBC0B /* GameScene.swift in Sources */,
+				4472CF75276C3E98007B78F1 /* MenuScene.swift in Sources */,
 				446C830127621E7400EBBC0B /* GameViewController.swift in Sources */,
 				446C82F927621E7300EBBC0B /* AppDelegate.swift in Sources */,
 			);

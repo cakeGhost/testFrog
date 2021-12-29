@@ -7,6 +7,7 @@
 
 
 import Foundation
+import SpriteKit
 
 struct PhysicsCategory {
     static let frog: UInt32 = 0x1 << 0  // 1
@@ -14,4 +15,8 @@ struct PhysicsCategory {
     static let wallUp: UInt32 = 0x1 << 2 // 4
     static let wallDown: UInt32 = 0x1 << 3 // 8
     static let score: UInt32 = 0x1 << 4 // 16
+}
+
+struct SoundFx {
+    static let back = SKAction.playSoundFileNamed("bgm.mp3", waitForCompletion: false)
 }

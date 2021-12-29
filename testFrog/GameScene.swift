@@ -16,7 +16,11 @@ enum GameState {
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
  
-  
+    // MARK: 배경 선택 
+    var background = SKSpriteNode()
+    
+    var tutorial = SKSpriteNode()
+    
     // MARK: 개구리 노드
     var frog = SKSpriteNode()
     
@@ -33,7 +37,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameState = GameState.ready // 초기상태는 ready니까 ready상태로 초기화함
     var moving: SKNode!
     var restartBTN = SKSpriteNode()
-    
+    var startBTN = SKSpriteNode()
     
     // MARK: Sprite
     
@@ -42,6 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createFrog()
         createEnvironment()
         createScore()
+        createTutorial()
         self.physicsWorld.contactDelegate = self
         self.physicsWorld.gravity = CGVector(dx: 0, dy: -10) // -9.8은 개구리가 아주 지멋대로임 아주 그냥
         
@@ -118,13 +123,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             print(land.size.height)
         }
     
-        let skyTexture = environmentAtlas.textureNamed("sky4")
+        
+        
+        
+        // let skyTexture = environmentAtlas.textureNamed("sky4")
+        
+        guard let skyTexture = self.background.texture else {
+            return
+        }
+        
         let skyRepeatNum = Int(ceil(self.size.width / skyTexture.size().width))
         
         for i in 0...skyRepeatNum {
             let sky = SKSpriteNode(texture: skyTexture)
             sky.anchorPoint = CGPoint.zero
-            sky.position = CGPoint(x: CGFloat(i) * sky.size.width, y: 0)
+            //sky.position = CGPoint(x: CGFloat(i) * sky.size.width, y: 0)
+            sky.position = CGPoint(x: CGFloat(i) * sky.size.width, y: CGFloat(0))
             sky.zPosition = 1
             addChild(sky)
 
@@ -155,7 +169,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         obstacleDown.physicsBody?.categoryBitMask = PhysicsCategory.wallUp
         obstacleDown.physicsBody?.isDynamic = false
         
-        let obstacleCollision = SKSpriteNode(color: UIColor.black, size: CGSize(width: 1, height: self.size.height))
+        let obstacleCollision = SKSpriteNode(color: UIColor.black, size: CGSize(width: 0.04, height: self.size.height))
         obstacleCollision.zPosition = 2
         obstacleCollision.physicsBody = SKPhysicsBody(rectangleOf: obstacleCollision.size)
         obstacleCollision.physicsBody?.categoryBitMask = PhysicsCategory.score
@@ -203,6 +217,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
+    func createTutorial() {
+        tutorial = SKSpriteNode(imageNamed: "click")
+        tutorial.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+        tutorial.setScale(0.58)
+        tutorial.zPosition = 9
+        addChild(tutorial)
+    }
+    
+    
     // MARK: 터치 이벤트
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         //  switch문 넣었으므로 주석 처리
@@ -215,12 +238,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.frog.physicsBody?.isDynamic = true
             self.frog.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 10))
             createForever(duration: 3)
+            let fadeOut = SKAction.fadeOut(withDuration: 2.0)
+            let wait = SKAction.wait(forDuration: 2.0)
+            let remove = SKAction.removeFromParent()
+            let actSequence = SKAction.sequence([fadeOut, wait, remove])
+            self.tutorial.run(actSequence)
             
         case .playing:
+            self.run(SoundFx.back)
             self.frog.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             self.frog.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 40)) // 원래 50으로했음 ~ 점프하는강도임
+            
+            
+            
         case .dead:
-            let scene = GameScene(size: self.size)
+            let scene = MenuScene(size: self.size)
             let transition = SKTransition.doorsOpenVertical(withDuration: 1)
             self.view?.presentScene(scene, transition: transition)
             
@@ -228,8 +260,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
   
     }
     
+    // 재시작 버튼
     func createBTN() {
        restartBTN = SKSpriteNode(imageNamed: "restart")
+        restartBTN.size = CGSize(width: 300, height:  110)
         restartBTN.position = CGPoint(x: self.size.width / 2, y: self.size.height - 250)
         restartBTN.zPosition = 6
         restartBTN.setScale(0)
@@ -237,11 +271,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         restartBTN.run(SKAction.scale(to: 1.0, duration: 0.3))
     }
     
-    
+    // 시작 버튼
+    func createStartBTN() {
+       startBTN = SKSpriteNode(imageNamed: "startButton")
+        startBTN.size = CGSize(width: 300, height:  120)
+        startBTN.position = CGPoint(x: self.size.width / 2, y: self.size.height - 250)
+        startBTN.zPosition = 6
+        startBTN.setScale(0)
+        self.addChild(startBTN)
+        startBTN.run(SKAction.scale(to: 1.0, duration: 0.3))
+    }
+  
     
     
     func didBegin(_ contact: SKPhysicsContact) {
-    
+        var callMethodFlag: Bool = false
         var collideBody = SKPhysicsBody() // frog가 아닌 다른 충돌 객체
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
                   
@@ -254,20 +298,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
         
         let collideType = collideBody.categoryBitMask
-        
+  
+       
         switch collideType {
         case PhysicsCategory.land:
             print("land에 부딫힘 죽어야함")
             gameOver()
-            createBTN()
+            //createBTN()
         case PhysicsCategory.wallUp:
             print("위에 장애물")
             gameOver()
-            createBTN()
+            //createBTN()
         case PhysicsCategory.wallDown:
             print("아래장애물")
             gameOver()
-            createBTN()
+            //createBTN()
         case PhysicsCategory.score:
             print("점수")
             score += 1
@@ -283,9 +328,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.gameState = .dead
         //demageEffect()
         createBTN()
-        // Scene 멈추기
-        self.isPaused = true
-        
+        //self.isPaused = true
     }
     
     
